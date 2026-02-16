@@ -1,0 +1,7 @@
+# PluginSmith Security Policy
+# https://securitytxt.org/
+
+Contact: https://github.com/vRoozendaal/PluginSmith/security/advisories
+Preferred-Languages: en
+Canonical: https://pluginsmith.app/.well-known/security.txt
+Expires: 2026-02-16T00:00:00.000Z

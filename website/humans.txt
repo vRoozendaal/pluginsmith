@@ -1,0 +1,10 @@
+/* TEAM */
+Developer: Roel van Roozendaal
+Location: The Netherlands
+GitHub: https://github.com/vRoozendaal/PluginSmith
+
+/* SITE */
+Last update: 2025-02-16
+Language: English
+Standards: HTML5, CSS3
+Software: PluginSmith, Xcode, SwiftUI

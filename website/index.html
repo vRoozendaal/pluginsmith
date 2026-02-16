@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>PluginSmith — Build Claude Code Plugins Visually</title>
+  <meta name="description" content="A free, open-source macOS app that turns your documentation into production-ready Claude Code plugins and skills. Import docs, configure with AI, generate with one click.">
+  <meta name="keywords" content="Claude Code, plugin builder, Claude plugin, Anthropic, macOS app, developer tools, AI tools, open source, Claude Code plugins, skill builder, MCP server">
+  <meta name="author" content="Roel van Roozendaal">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://pluginsmith.app/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pluginsmith.app/">
+  <meta property="og:title" content="PluginSmith — Build Claude Code Plugins Visually">
+  <meta property="og:description" content="A free macOS app that turns documentation into production-ready Claude Code plugins and skills. No coding required.">
+  <meta property="og:image" content="https://pluginsmith.app/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="PluginSmith">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PluginSmith — Build Claude Code Plugins Visually">
+  <meta name="twitter:description" content="A free macOS app that turns documentation into production-ready Claude Code plugins. Open source, MIT licensed.">
+  <meta name="twitter:image" content="https://pluginsmith.app/images/og-image.png">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="512x512" href="images/app-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/app-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/app-icon.png">
+  <link rel="apple-touch-icon" href="images/app-icon.png">
+
+  <!-- Misc -->
+  <meta name="theme-color" content="#6e56cf" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#9b8aff" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-title" content="PluginSmith">
+  <meta name="application-name" content="PluginSmith">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PluginSmith",
+    "description": "A free, open-source macOS app that turns documentation into production-ready Claude Code plugins and skills.",
+    "url": "https://pluginsmith.app",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS 15.0+",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Roel van Roozendaal"
+    },
+    "license": "https://pluginsmith.app/license.html",
+    "softwareVersion": "0.1.0",
+    "downloadUrl": "https://github.com/vRoozendaal/PluginSmith/releases",
+    "screenshot": "https://pluginsmith.app/images/screenshot-configure.png",
+    "featureList": "Claude Code plugin generation, AI-assisted configuration, slash command builder, skill builder, agent builder, hook configuration, MCP server setup, one-click install to Claude marketplace"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PluginSmith",
+    "url": "https://pluginsmith.app",
+    "description": "Build Claude Code plugins visually"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is PluginSmith?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PluginSmith is a free, open-source macOS application that helps developers create Claude Code plugins and skills from documentation. It provides a visual three-step workflow: import documents, configure with AI assistance, and generate production-ready plugins."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PluginSmith free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. PluginSmith is completely free and open source under the MIT License. The only cost is your own Anthropic API usage for AI-assisted features, which you control entirely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need an API key?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. PluginSmith requires your own Anthropic API key to power AI features like source analysis and plugin generation. You can get one at console.anthropic.com. Your key is stored securely in the macOS Keychain."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What file formats can I import?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PluginSmith supports Markdown, PDF, Microsoft Word (.docx), Excel (.xlsx), plain text files, and web URLs. Documents are parsed locally on your Mac."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --text: #1d1d1f;
+      --text-secondary: #86868b;
+      --bg: #fbfbfd;
+      --card-bg: #ffffff;
+      --border: #e8e8ed;
+      --accent: #6e56cf;
+      --accent-light: #f4f0ff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #f5f5f7;
+        --text-secondary: #a1a1a6;
+        --bg: #000000;
+        --card-bg: #1c1c1e;
+        --border: #2c2c2e;
+        --accent: #9b8aff;
+        --accent-light: #1a1530;
+      }
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(251, 251, 253, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      nav {
+        background: rgba(0, 0, 0, 0.72);
+      }
+    }
+
+    nav .nav-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 22px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    nav .logo img {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+    }
+
+    nav .logo span {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    nav .nav-links a {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 140px 22px 80px;
+      text-align: center;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .hero .icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 26px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.07;
+      margin-bottom: 16px;
+    }
+
+    .hero .subtitle {
+      font-size: 21px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.38;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .hero .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 980px;
+      font-size: 17px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .hero .cta:hover {
+      opacity: 0.88;
+      transform: scale(1.02);
+    }
+
+    .hero .cta-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Screenshot */
+    .screenshot-section {
+      max-width: 1080px;
+      margin: 0 auto 100px;
+      padding: 0 22px;
+    }
+
+    .screenshot-frame {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      display: block;
+    }
+
+    .screenshot-placeholder {
+      padding: 120px 40px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* How it works */
+    .section {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 80px 22px;
+    }
+
+    .section-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .section h2 {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      margin-bottom: 20px;
+    }
+
+    .section .section-intro {
+      font-size: 19px;
+      color: var(--text-secondary);
+      line-height: 1.42;
+      max-width: 680px;
+      margin-bottom: 56px;
+    }
+
+    /* Steps */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .step {
+      background: var(--card-bg);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .step h3 {
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 15px;
+      line-height: 1.47;
+      color: var(--text-secondary);
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .feature {
+      background: var(--card-bg);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .feature h3 {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .feature p {
+      font-size: 15px;
+      line-height: 1.47;
+      color: var(--text-secondary);
+    }
+
+    /* API Key Section */
+    .api-section {
+      background: var(--card-bg);
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+      padding: 56px 48px;
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    .api-section h3 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .api-section > p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.47;
+      margin-bottom: 32px;
+    }
+
+    .api-steps {
+      list-style: none;
+      counter-reset: api-step;
+    }
+
+    .api-steps li {
+      counter-increment: api-step;
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+
+    .api-steps li::before {
+      content: counter(api-step);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .api-steps li .step-content {
+      padding-top: 3px;
+    }
+
+    .api-steps li .step-content strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .api-steps li .step-content span {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .api-steps li .step-content a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .api-steps li .step-content a:hover {
+      text-decoration: underline;
+    }
+
+    .api-steps li .step-content code {
+      font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace;
+      font-size: 13px;
+      background: var(--accent-light);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* Why Free */
+    .why-free {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 80px 22px;
+    }
+
+    .why-free h2 {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .why-free p {
+      font-size: 17px;
+      line-height: 1.53;
+      color: var(--text-secondary);
+    }
+
+    /* CTA */
+    .final-cta {
+      text-align: center;
+      padding: 80px 22px 100px;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .final-cta h2 {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .final-cta p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 20px 22px;
+    }
+
+    .footer-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-inner .copyright {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .hero .subtitle { font-size: 17px; }
+      .section h2 { font-size: 32px; }
+      .steps { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr; }
+      .api-section { padding: 36px 24px; }
+      .api-section h3 { font-size: 22px; }
+      nav .nav-links { gap: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 28px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="images/app-icon.png" alt="PluginSmith">
+        <span>PluginSmith</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="https://github.com/vRoozendaal/PluginSmith" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="images/app-icon.png" alt="PluginSmith" class="icon">
+    <h1>Turn documentation into<br>Claude Code plugins.</h1>
+    <p class="subtitle">
+      Drop in your docs. Get a production-ready plugin.
+      No coding required. Free and open source.
+    </p>
+    <a href="https://github.com/vRoozendaal/PluginSmith/releases" class="cta">
+      Download for macOS
+    </a>
+    <p class="cta-note">Requires macOS 15.0 or later. Free forever.</p>
+  </section>
+
+  <!-- Screenshot -->
+  <div class="screenshot-section">
+    <div class="screenshot-frame">
+      <img src="images/screenshot-configure.png" alt="PluginSmith — Configure phase showing commands, skills, and AI suggestions">
+      <!-- Replace with your actual screenshot. Recommended: 2560x1600 or similar retina resolution. -->
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <section class="section" id="how-it-works">
+    <p class="section-label">How It Works</p>
+    <h2>Three steps.<br>That's it.</h2>
+    <p class="section-intro">
+      PluginSmith follows a simple workflow. Import your source material, let AI help you configure the plugin structure, and generate everything with one click.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Import</h3>
+        <p>Drop in Markdown, PDF, Word, Excel files, or paste a URL. PluginSmith parses and analyzes your documentation automatically.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Configure</h3>
+        <p>Define commands, skills, agents, and hooks. Or let AI analyze your sources and suggest the entire plugin structure for you.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Generate</h3>
+        <p>One click generates all files. Install directly to Claude's local marketplace, export to a folder, or package for distribution.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2>Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-intro">
+      Built for developers who want professional Claude Code plugins without writing boilerplate.
+    </p>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">&#x2318;</div>
+        <h3>Commands</h3>
+        <p>Create slash commands with descriptions, argument hints, allowed tools, and model selection. Each command gets its own properly formatted file.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x2699;</div>
+        <h3>Skills</h3>
+        <p>Build specialized instruction sets with reference files and examples. Generate standalone skills or bundle them into full plugins.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x25C9;</div>
+        <h3>Agents</h3>
+        <p>Configure autonomous agents with specific tools, models, and color coding. Define missions, workflows, and output formats.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x21BB;</div>
+        <h3>Hooks</h3>
+        <p>Set up event-based triggers for session start, tool use, prompt submission, and more. Full hooks.json generation included.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x2728;</div>
+        <h3>AI-Assisted Configuration</h3>
+        <p>Click "Analyze Sources" and let Claude read your documentation to suggest commands, skills, agents, and references automatically.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x21E9;</div>
+        <h3>One-Click Install</h3>
+        <p>Install plugins directly to Claude's local marketplace. Or export as a .plugin package to share with anyone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Key Setup -->
+  <section class="section" id="setup">
+    <p class="section-label">Setup</p>
+    <h2>Bring your own<br>Claude API key.</h2>
+    <p class="section-intro">
+      PluginSmith uses the Anthropic API to analyze your documents and generate plugin content. You'll need your own API key. Your key stays on your machine, stored securely in the macOS Keychain.
+    </p>
+    <div class="api-section">
+      <h3>Get your API key</h3>
+      <p>It only takes a minute. Here's how.</p>
+      <ol class="api-steps">
+        <li>
+          <div class="step-content">
+            <strong>Create an Anthropic account</strong>
+            <span>Go to <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> and sign up or log in.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Generate an API key</strong>
+            <span>Navigate to <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Settings &rarr; API Keys</a> and create a new key.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Copy the key</strong>
+            <span>It starts with <code>sk-ant-</code>. Copy it to your clipboard.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Paste into PluginSmith</strong>
+            <span>Open PluginSmith &rarr; Settings &rarr; paste your API key. The app validates it instantly.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Why Free -->
+  <section class="why-free">
+    <h2>Why is it free?</h2>
+    <p>
+      PluginSmith is an open-source tool built by a developer, for developers.
+      It's released under the MIT License because great tools should be accessible to everyone.
+      The only cost is your own Anthropic API usage, which you control entirely.
+      No accounts. No tracking. No subscriptions. Just a tool that works.
+    </p>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta">
+    <h2>Start building plugins.</h2>
+    <p>Download PluginSmith and create your first Claude Code plugin in minutes.</p>
+    <a href="https://github.com/vRoozendaal/PluginSmith/releases" class="cta">
+      Download for macOS
+    </a>
+    <p class="cta-note">Free. Open source. MIT License.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <span class="copyright">&copy; 2025 Roel van Roozendaal. All rights reserved.</span>
+      <ul class="footer-links">
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="license.html">MIT License</a></li>
+        <li><a href="https://github.com/vRoozendaal/PluginSmith" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>

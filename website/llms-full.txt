@@ -1,0 +1,113 @@
+# PluginSmith — Complete Documentation
+
+> A free, open-source macOS app that turns documentation into production-ready Claude Code plugins and skills.
+
+## Overview
+
+PluginSmith is a native macOS application that helps developers create Claude Code plugins visually. Instead of manually writing plugin configuration files, YAML frontmatter, and directory structures, developers drop in their documentation and let PluginSmith generate everything.
+
+The app follows a three-phase workflow: Import, Configure, Generate.
+
+## Platform Requirements
+
+- macOS 15.0 (Sequoia) or later
+- An Anthropic API key (the app uses Claude Sonnet for AI features)
+- No other dependencies required
+
+## License
+
+MIT License. Free forever. No accounts, no tracking, no subscriptions.
+
+## How It Works
+
+### Phase 1: Import
+
+Users import source documentation that forms the knowledge base for their plugin. Supported formats:
+
+- Markdown (.md, .markdown)
+- Plain text (.txt)
+- PDF (.pdf)
+- Microsoft Word (.docx, .doc)
+- Excel spreadsheets (.xlsx)
+- Web URLs (fetched and converted to markdown)
+
+Documents are parsed locally. Section detection identifies content types: overview, API reference, code examples, configuration, installation, usage, troubleshooting.
+
+### Phase 2: Configure
+
+Users define the plugin structure. The app supports:
+
+**Commands**: Slash commands with descriptions, argument hints, allowed tools, and model selection. Each command gets a markdown file with YAML frontmatter.
+
+**Skills**: Specialized instruction sets triggered contextually. Include reference files and examples. Can be generated as standalone skills or bundled into full plugins.
+
+**Agents**: Autonomous agents with specific tools, models, color coding, missions, and output formats. Models available: Sonnet, Haiku, Opus.
+
+**Hooks**: Event-based triggers (SessionStart, PreToolUse, PostToolUse, UserPromptSubmit, Stop) with tool-specific matchers and custom actions. Generates hooks.json.
+
+**MCP Servers**: Model Context Protocol server configurations (HTTP and stdio). Generates .mcp.json.
+
+**AI-Assisted Configuration**: The "Analyze Sources" feature sends imported documents to Claude, which suggests commands, skills, agents, and references with rationale. Users accept or dismiss each suggestion individually.
+
+### Phase 3: Generate
+
+One click generates all files:
+
+- `.claude-plugin/plugin.json` — Plugin metadata
+- `commands/*.md` — Command files with YAML frontmatter
+- `skills/{name}/SKILL.md` — Skill definitions
+- `skills/{name}/references/` — Reference materials
+- `skills/{name}/examples/` — Example files
+- `agents/*.md` — Agent configurations
+- `hooks/hooks.json` — Hook event configurations
+- `.mcp.json` — MCP server configurations
+- `README.md` — Auto-generated documentation
+
+Export options:
+- Install directly to Claude's local marketplace (~/.claude/plugins/)
+- Export to a custom folder
+- Package as a .plugin file (ZIP) for distribution
+- Reveal in Finder
+
+## API Key
+
+PluginSmith requires a personal Anthropic API key. The key is stored in the macOS Keychain (never in plain text). It communicates only with api.anthropic.com over HTTPS. No data is sent to any other server.
+
+To get an API key:
+1. Go to console.anthropic.com
+2. Navigate to Settings → API Keys
+3. Create a new key (starts with sk-ant-)
+4. Paste into PluginSmith → Settings
+
+## Privacy
+
+- No data collection
+- No analytics or telemetry
+- No tracking
+- No accounts required
+- All data stays on the user's machine
+- Document content is sent to Anthropic API only when the user explicitly triggers AI features
+
+## Technical Details
+
+- Built with Swift and SwiftUI
+- Observable state management (@Observable pattern)
+- Async/await for API calls
+- Service-oriented architecture
+- Projects saved as .pluginsmith files (JSON)
+- Recent projects tracking (up to 10)
+
+## Author
+
+Roel van Roozendaal
+The Netherlands
+GitHub: https://github.com/vRoozendaal/PluginSmith
+
+## Links
+
+- Website: https://pluginsmith.app
+- Download: https://github.com/vRoozendaal/PluginSmith/releases
+- Source code: https://github.com/vRoozendaal/PluginSmith
+- Privacy policy: https://pluginsmith.app/privacy.html
+- Terms: https://pluginsmith.app/terms.html
+- License: https://pluginsmith.app/license.html

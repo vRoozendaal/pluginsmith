@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "PluginSmith",
+  "name_for_model": "pluginsmith",
+  "description_for_human": "A free macOS app that turns documentation into Claude Code plugins and skills.",
+  "description_for_model": "PluginSmith is an open-source macOS developer tool for creating Claude Code plugins. It imports documentation (Markdown, PDF, Word, Excel, URLs), uses AI to suggest plugin structure, and generates production-ready plugins with commands, skills, agents, hooks, and MCP servers. Free under MIT License. Requires user's own Anthropic API key.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "none"
+  },
+  "logo_url": "https://pluginsmith.app/images/app-icon.png",
+  "contact_email": "",
+  "legal_info_url": "https://pluginsmith.app/terms.html"
+}

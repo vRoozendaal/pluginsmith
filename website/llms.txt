@@ -1,0 +1,26 @@
+# PluginSmith
+
+> A free, open-source macOS app that turns documentation into production-ready Claude Code plugins and skills.
+
+PluginSmith is a native macOS application for developers who use Claude Code. It provides a visual, three-step workflow to create plugins without writing boilerplate.
+
+## What it does
+
+- Imports documentation (Markdown, PDF, Word, Excel, web URLs)
+- Uses AI to analyze sources and suggest plugin structure
+- Generates complete Claude Code plugins with commands, skills, agents, and hooks
+- Exports directly to Claude's local marketplace or as distributable packages
+
+## Key details
+
+- Platform: macOS 15.0+
+- License: MIT
+- Cost: Free (requires your own Anthropic API key)
+- Author: Roel van Roozendaal
+- Language: Swift / SwiftUI
+
+## Links
+
+- Website: https://pluginsmith.app
+- GitHub: https://github.com/vRoozendaal/PluginSmith
+- Full documentation: https://pluginsmith.app/llms-full.txt

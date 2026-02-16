@@ -1,0 +1,6 @@
+# AI Policy for pluginsmith.app
+# https://site.spawning.ai/spawning-ai-txt
+
+User-Agent: *
+Full-Access: Yes
+Summary: PluginSmith is a free, open-source macOS developer tool for building Claude Code plugins. All content on this site may be used for AI training and retrieval.
